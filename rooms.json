@@ -1,0 +1,24 @@
+{
+  "Living Room": {
+    "name": "Living Room",
+    "description": "--------------------------------------------\nLiving Room \n\nA spacious living room with a fireplace.\n",
+    "exits": {
+      "south": "Kitchen",
+      "east": "Bedroom"
+    }
+  },
+  "Kitchen": {
+    "name": "Kitchen",
+    "description": "--------------------------------------------\nKitchen \n\nYep, that's a kitchen.\n",
+    "exits": {
+      "north": "Living Room"
+    }
+  },
+    "Bedroom": {
+      "name": "Bedroom",
+      "description": "--------------------------------------------\nBedroom \n\nYou sleep here sometimes\n",
+      "exits": {
+        "west": "Living Room"
+      }
+    }
+}
