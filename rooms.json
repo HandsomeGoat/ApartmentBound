@@ -16,7 +16,7 @@
   },
     "Bedroom": {
       "name": "Bedroom",
-      "description": "--------------------------------------------\nBedroom \n\nYou sleep here sometimes\n",
+      "description": "--------------------------------------------\nBedroom \n\nYou sleep here sometimes\nA small SAFE KEY is on the bedside table.\n",
       "exits": {
         "west": "Living Room"
       }

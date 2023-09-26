@@ -68,6 +68,7 @@ class Item:
             return items
 
 
+
 class Player:
     def __init__(self):
         self.inventory = []
@@ -75,13 +76,24 @@ class Player:
     def add_item(self, item):
         self.inventory.append(item)
 
-    def get_item(self, item):
-        for x in self.inventory:
-            if x.name == item:
-                return item
+    def get_item(self, item_name):
+        for item in self.inventory:
+            if item.name.lower() == item_name.lower():
+                return item  # Return the item if found
+        return None  # Return None if item is not found
 
-    def remove_item(self, item):
-        self.inventory.remove(item)
+    def remove_item(self, item_name):
+        if isinstance(item_name, str):
+            item_index_to_remove = None
+            for index, item in enumerate(self.inventory):
+                if item.name.lower() == item_name.lower():
+                    item_index_to_remove = index
+                    break
+
+            if item_index_to_remove is not None:
+                removed_item = self.inventory.pop(item_index_to_remove)
+                return removed_item
+        return None
 
 # Initialize the Player object
 player = Player()
@@ -110,11 +122,15 @@ while True:
     # Get user input
     user_input = input("Enter a command: ").strip().lower()
 
-    # Exit the game
     if user_input == "quit" or user_input == "exit":
         print("\nThanks for playing! Goodbye.")
         break  # Exit the game loop
 
+    # Check if the input is a valid exit
+    next_room = current_room.get_exit(user_input)
+
+    if next_room:
+        current_room = rooms[next_room]
     # Take an item from the current room
     elif user_input.startswith("take"):
         item_name = user_input.split(" ", 1)[1]
@@ -125,8 +141,7 @@ while True:
             print(f"You have taken the {item.name}.")
         else:
             print("That item is not here.")
-
-    # Drop an item into the current room
+    # Drop an item from the player's inventory
     elif user_input.startswith("drop"):
         item_name = user_input.split(" ", 1)[1]
         item = player.get_item(item_name)
@@ -136,11 +151,5 @@ while True:
             print(f"You have dropped the {item.name}.")
         else:
             print("You don't have that item.")
-
- # Check if the input is a valid exit
-    next_room = current_room.get_exit(user_input)
-
-    if next_room:
-        current_room = rooms[next_room]
     else:
         print("Invalid command. Try again.")
