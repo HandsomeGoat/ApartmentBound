@@ -56,6 +56,18 @@ class Item:
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def load_items_from_json(file_path):
+        with open(file_path, "r") as json_file:
+            item_data = json.load(json_file)
+    
+            items = {}
+            for item_id, data in item_data.items():
+                item = Item(data["name"], data["description"])
+                items[item_id] = item
+            return items
+
+
 class Player:
     def __init__(self):
         self.inventory = []
@@ -71,17 +83,6 @@ class Player:
     def remove_item(self, item):
         self.inventory.remove(item)
 
-# Load items from the JSON file
-def load_items_from_json(file_path):
-    with open(file_path, "r") as json_file:
-        item_data = json.load(json_file)
-    
-    items = {}
-    for item_id, data in item_data.items():
-        item = Item(data["name"], data["description"])
-        items[item_id] = item
-
-    return items
 # Initialize the Player object
 player = Player()
 
@@ -91,7 +92,7 @@ rooms = Room.load_rooms_from_json(room_data_file)
 
 # Load items into memory
 item_data_file = "items.json"  
-items = load_items_from_json(item_data_file)
+items = Item.load_items_from_json(item_data_file)
 
 # Create instances of items
 safe_key = items["Safe Key"]
@@ -143,4 +144,3 @@ while True:
         current_room = rooms[next_room]
     else:
         print("Invalid command. Try again.")
-
