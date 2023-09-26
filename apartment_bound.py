@@ -82,7 +82,14 @@ def load_items_from_json(file_path):
         items[item_id] = item
 
     return items
+# Initialize the Player object
+player = Player()
 
+# Load the rooms into memory
+room_data_file = "rooms.json" 
+rooms = Room.load_rooms_from_json(room_data_file)
+
+# Load items into memory
 item_data_file = "items.json"  
 items = load_items_from_json(item_data_file)
 
@@ -92,13 +99,7 @@ safe_key = items["Safe Key"]
 # Add items to rooms or the player's inventory as needed
 rooms["Bedroom"].add_item(safe_key)
 
-
-
-room_data_file = "rooms.json" 
-rooms = Room.load_rooms_from_json(room_data_file)
-
-player = Player()
-
+# Set initial room / player state
 current_room = rooms["Living Room"]
 
 while True:
@@ -108,22 +109,15 @@ while True:
     # Get user input
     user_input = input("Enter a command: ").strip().lower()
 
+    # Exit the game
     if user_input == "quit" or user_input == "exit":
         print("\nThanks for playing! Goodbye.")
         break  # Exit the game loop
 
-    # Check if the input is a valid exit
-    next_room = current_room.get_exit(user_input)
-
-    if next_room:
-        current_room = rooms[next_room]
-    else:
-        print("Invalid command. Try again.")
-
+    # Take an item from the current room
     elif user_input.startswith("take"):
-        item_name = user_input.split(" ", 1)[1]  # Extract item name from the command
+        item_name = user_input.split(" ", 1)[1]
         item = current_room.get_item(item_name)
-        
         if item:
             player.add_item(item)
             current_room.remove_item(item)
@@ -131,13 +125,22 @@ while True:
         else:
             print("That item is not here.")
 
+    # Drop an item into the current room
     elif user_input.startswith("drop"):
-        item_name = user_input.split(" ", 1)[1]  # Extract item name from the command
+        item_name = user_input.split(" ", 1)[1]
         item = player.get_item(item_name)
-
         if item:
             current_room.add_item(item)
             player.remove_item(item)
             print(f"You have dropped the {item.name}.")
         else:
             print("You don't have that item.")
+
+ # Check if the input is a valid exit
+    next_room = current_room.get_exit(user_input)
+
+    if next_room:
+        current_room = rooms[next_room]
+    else:
+        print("Invalid command. Try again.")
+
